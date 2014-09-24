@@ -7,15 +7,19 @@
   </head>
   <body>
     <form name="js" id="form" action="">
-      <input type="number" name="circle1_x" id="circle1_x" value=""/>
-      <input type="number" name="circle1_y" id="circle1_y" value=""/>
-      <input type="number" name="radius1" id="radius1" value=""/>
-      <br/>
-      <input type="number" name="circle2_x" id="circle2_x" value=""/>
-      <input type="number" name="circle2_y" id="circle2_y" value=""/>
-      <input type="number" name="radius2" id="radius2" value=""/>
+    circle1(red)<br>
+    x:<input type="number" name="circle1_x" id="circle1_x" value=""/>
+    y:<input type="number" name="circle1_y" id="circle1_y" value=""/>
+    r:<input type="number" name="radius1" id="radius1" value=""/>
+    <br/>
+    circle2(blue)<br>
+    x:<input type="number" name="circle2_x" id="circle2_x" value=""/>
+    y:<input type="number" name="circle2_y" id="circle2_y" value=""/>
+    r:<input type="number" name="radius2" id="radius2" value=""/>
       <br/>
       <input type="button" value="exec" onclick="exec();" />
+      <br/>
+      <canvas id="c1" width="500" height="500"></canvas>
     </form>
     <div id="result"></div>
   </body>
