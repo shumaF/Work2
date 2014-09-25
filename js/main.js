@@ -17,16 +17,17 @@ function Circle(x, y, r) {
 /**
  * 円と円の距離をはかるstaticメソッド．
  */
-Circle.distance = fiction(circle1, circle2) {
+Circle.distance = function (circle1, circle2) {
   var x_distance = circle1.x - circle2.x;
   var y_distance = circle1.y - circle2.y;
+  alert(x_distance + ":" + y_distance);
   return Math.sqrt(Math.pow(x_distance,2) + Math.pow(y_distance,2));
 }
 /**
  * 重なりを表現する定数群．
  */
 var SAME_CIRCLE = "完璧に重なっている";
-var N"内部に存在している"ON_CROSS = "交わっていない";
+var NON_CROSS = "交わっていない";
 var OUT_TOUCH = "外側で接している";
 var TWO_CROSS = "二点が交わっている";
 var IN_CROSS = "内側で接している";
@@ -37,7 +38,8 @@ var CIRCLE_IN_CIRCLE = "内部に存在している";
 Circle.isOverlap = function(circle1, circle2) {
   var r_sum = circle1.r + circle2.r;
   var r_sub = Math.abs(circle1.r - circle2.r);
-  var d = distance(circle1.x, circle1.y, circle2.x, circle2.y);
+  var d = Circle.distance(circle1, circle2);
+  alert(r_sum + ":"+ r_sub + ":" + d);
   if(d == 0 && r_sub == 0)        return SAME_CIRCLE;
   else if(d > r_sum)              return NON_CROSS;
   else if(d == r_sum)             return OUT_TOUCH;
@@ -62,9 +64,7 @@ Circle.createCircleByDoc = function(circle_num) {
 function exec() {
   var circle1 = Circle.createCircleByDoc(1);
   var circle2 = Circle.createCircleByDoc(2);
-  var d = Circle.distance(circle1.x,circle1.y,circle2.x,circle2.y);
   var result = Circle.isOverlap(circle1, circle2);
-  alert(result);
   document.getElementById("result").innerHTML = result;
   draw(circle1.x,circle1.y,circle1.r,circle2.x,circle2.y,circle2.r);
 }
