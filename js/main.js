@@ -1,39 +1,86 @@
-function exec() {
-   var x1 = parseInt(document.getElementById("circle1_x").value);
-   var y1 = parseInt(document.getElementById("circle1_y").value);
-   var r1 = parseInt(document.getElementById("radius1").value);
-   var x2 = parseInt(document.getElementById("circle2_x").value);
-   var y2 = parseInt(document.getElementById("circle2_y").value);
-   var r2 = parseInt(document.getElementById("radius2").value);
-   var d = distance(x1,y1,x2,y2);
-   var result = "";
-   var rr = r1 + r2;
-   if(d == 0 && r1 == r2) result = "完璧に重なっている"
-   else if(d > rr) result = "交わっていない";
-   else  if(d == rr)  result = "外側で接している";
-   else if(Math.abs(r1-r2) < d &&d < rr) result = "二点が交わっている";
-   else if(Math.abs(r1-r2) == d) result = "内側で接している"
-   else result = "交わっていない";
+/**
+ *@fileOverview 二つの円の重複をチェックするファイル．
+ *
+ * @author shumaF
+ * @version 0.1
+ */
 
-   document.getElementById("result").innerHTML = result;
-   draw(x1,y1,r1,x2,y2,r2);
+/// ~~~~~ 円クラス ~~~~~ ///
+ /**
+  * 円のコンストラクタ．
+  */
+function Circle(x, y, r) {
+  this.x = x;
+  this.y = y;
+  this.r = r;
 }
-function distance(x1,y1,x2,y2) {
-   var a = x1 - x2;
-   var b = y1 - y2;
-   var d = Math.sqrt(Math.pow(a,2) + Math.pow(b,2));
-   return d;
+/**
+ * 円と円の距離をはかるstaticメソッド．
+ */
+Circle.distance = fiction(circle1, circle2) {
+  var x_distance = circle1.x - circle2.x;
+  var y_distance = circle1.y - circle2.y;
+  return Math.sqrt(Math.pow(x_distance,2) + Math.pow(y_distance,2));
 }
+/**
+ * 重なりを表現する定数群．
+ */
+var SAME_CIRCLE = "完璧に重なっている";
+var N"内部に存在している"ON_CROSS = "交わっていない";
+var OUT_TOUCH = "外側で接している";
+var TWO_CROSS = "二点が交わっている";
+var IN_CROSS = "内側で接している";
+var CIRCLE_IN_CIRCLE = "内部に存在している";
+/**
+ * 重なっているかを評価するstaticメソッド．
+ */
+Circle.isOverlap = function(circle1, circle2) {
+  var r_sum = circle1.r + circle2.r;
+  var r_sub = Math.abs(circle1.r - circle2.r);
+  var d = distance(circle1.x, circle1.y, circle2.x, circle2.y);
+  if(d == 0 && r_sub == 0)        return SAME_CIRCLE;
+  else if(d > r_sum)              return NON_CROSS;
+  else if(d == r_sum)             return OUT_TOUCH;
+  else if(r_sub < d && d < r_sum) return TWO_CROSS;
+  else if(r_sub == d)             return IN_CROSS;
+  else                            return CIRCLE_IN_CIRCLE;
+}
+/**
+ * ファクトリーメソッド．
+ */
+Circle.createCircleByDoc = function(circle_num) {
+  var x = parseInt(document.getElementById("circle"+circle_num+"_x").value);
+  var y = parseInt(document.getElementById("circle"+circle_num+"_y").value);
+  var r = parseInt(document.getElementById("radius"+circle_num).value);
+  return new Circle(x, y, r);
+}
+// ~~~~~ end ~~~~~
+/**
+ * メインの実行メソッド．
+ * htmlから呼び出す．
+ */
+function exec() {
+  var circle1 = Circle.createCircleByDoc(1);
+  var circle2 = Circle.createCircleByDoc(2);
+  var d = Circle.distance(circle1.x,circle1.y,circle2.x,circle2.y);
+  var result = Circle.isOverlap(circle1, circle2);
+  alert(result);
+  document.getElementById("result").innerHTML = result;
+  draw(circle1.x,circle1.y,circle1.r,circle2.x,circle2.y,circle2.r);
+}
+/**
+ * 円を描画するメソッド．
+ */
 function draw(x1, y1, r1, x2, y2, r2) {
   var min_x = (x1-r1 > x2-r2) ? x2-r2 : x1-r1;
-  min_x = (min_x >= 0) ? 0 : min_x; 
+  min_x = (min_x >= 0) ? 0 : min_x;
   var min_y = (y1-r1 > y2-r2) ? y2-r2 : y1-r1;
-  min_y = (min_y >= 0) ? 0 : min_y; 
+  min_y = (min_y >= 0) ? 0 : min_y;
   var max_x = (x1+r1 < x2+r2) ? x2+r2 : x1+r1;
-  var max_y = (x1+r1 < x2+r2) ? x2+r2 : x1+r1; 
+  var max_y = (x1+r1 < x2+r2) ? x2+r2 : x1+r1;
   var x = max_x - min_x;
   var y = max_y - min_y;
-  var ratio = (x > y) ? 480 / x : 480 / y; 
+  var ratio = (x > y) ? 480 / x : 480 / y;
   var canvas = document.getElementById('c1');
   if ( ! canvas || ! canvas.getContext ) { return false; }
   var ctx1 = canvas.getContext('2d');
